@@ -46,11 +46,11 @@
 <a href='videos.html'>Vidéos</a>
 </nav>
 
-<!-- BARRE DE RECHERCHE INJECTÉE ICI -->
+<!-- BARRE DE RECHERCHE -->
 <input type="text" id="searchBar" onkeyup="searchVideo()" placeholder="🔍 Rechercher un mot clé (ex: tuto, aikido, avis)...">
 
-<!-- Première carte de présentation (ignorée par la recherche pour rester visible) -->
-<div class='card' id="intro-card">
+<!-- Première carte de présentation -->
+<div class='card' data-tags="presentation intro envoyer regles principes">
 <p>
 Cette page permet à tous les pratiquants et passionnés de l'Inazuma-Ryū de partager leurs démonstrations, entraînements, kata ou techniques.
 
@@ -68,13 +68,13 @@ Cliquez sur le lien ci-dessous pour envoyer votre vidéo :
 </p>
 
 <p style="text-align:center;">
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSf0yWIu5wwZQ8ll3AkQwSUWpXTZJePG6CZFXLIHF6euVg6iMA/viewform?usp=publish-editor" target="_blank">
+<a href="https://google.com" target="_blank">
 📹 Envoyer une vidéo Inazuma-Ryū
 </a>
 </p>
 </div>
 
-<!-- CARTES DE CONTENU (FILTRÉES PAR LA RECHERCHE) -->
+<!-- CARTES DE CONTENU -->
 
 <div class="card" data-tags="publicite promo annonce clip">
     <h2>(✨) Inazuma-ryū | PUBLICITÉ</h2>
@@ -89,7 +89,7 @@ Cliquez sur le lien ci-dessous pour envoyer votre vidéo :
     <h2>(👤) Anonyme | Jōkata ( initialement Aïkido mais aussi étudié en Inazuma-ryū)</h2>
 <p>@Fenice Rossa Grottaglie A.S.D.(YouTube)</p>
     <iframe width="100%" height="315"
-        src="https://www.youtube.com/embed/QmbSZr1knK0"
+        src="https://youtube.com"
         title="Vidéo YouTube"
         frameborder="0"
         allowfullscreen>
@@ -104,14 +104,14 @@ Cliquez sur le lien ci-dessous pour envoyer votre vidéo :
          width="100%">
 </div>
 
-<div class='card' id="avis-form-card">
+<div class='card' data-tags="donner formulaire Google Forms questionnaire avis">
     <h2>Donnez votre avis</h2>
     <p>
         Votre avis est important pour l'évolution de l'Inazuma-Ryū et de son site officiel.
         N'hésitez pas à partager vos impressions, suggestions ou remarques.
     </p>
     <p style="text-align:center;">
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdIlw7e82CQLhrXN6UV2VDANoG21JbnCZHzhCZpuKIFhHSq0Q/viewform?usp=publish-editor"
+        <a href="https://google.com"
            target="_blank">
            ⭐ Donner mon avis
         </a>
@@ -130,30 +130,21 @@ Cliquez sur le lien ci-dessous pour envoyer votre vidéo :
     <img src="logo.png" alt="Logo Inazuma-Ryū">
 </div>
 
-
-        } else {
-            cards[i].style.display = "none";
-        }
-    }
-}
-</script>
+<!-- LE SCRIPT DE RECHERCHE CORRIGÉ -->
 <script>
 function searchVideo() {
-    // 1. On récupère le mot tapé dans la barre
     let input = document.getElementById('searchBar').value.toLowerCase();
-    
-    // 2. On prend absolument TOUTES les cartes de la page
     let cards = document.getElementsByClassName('card');
 
-    // 3. On les filtre TOUTES, sans en oublier une seule
     for (let i = 0; i < cards.length; i++) {
         let contentText = cards[i].innerText.toLowerCase();
+        let tags = cards[i].getAttribute('data-tags') ? cards[i].getAttribute('data-tags').toLowerCase() : "";
         
-        // Si le texte de la carte contient le mot tapé, on l'accorde, sinon on la cache
-        if (contentText.includes(input)) {
+        // On cherche dans le texte visible ET dans les mots-clés secrets (data-tags)
+        if (contentText.includes(input) || tags.includes(input)) {
             cards[i].style.display = "block";
         } else {
-            cards[i].style.display = "none"; // Ce coup-ci, ça cache TOUT le reste !
+            cards[i].style.display = "none";
         }
     }
 }
