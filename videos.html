@@ -130,26 +130,30 @@ Cliquez sur le lien ci-dessous pour envoyer votre vidéo :
     <img src="logo.png" alt="Logo Inazuma-Ryū">
 </div>
 
-<!-- SCRIPT JAVASCRIPT DE RECHERCHE -->
-<script>
-function searchVideo() {
-    let input = document.getElementById('searchBar').value.toLowerCase();
-    let cards = document.getElementsByClassName('card');
 
-    for (let i = 0; i < cards.length; i++) {
-        // On ignore la carte d'intro et le formulaire pour qu'ils restent toujours visibles
-        if (cards[i].id === "intro-card" || cards[i].id === "avis-form-card") {
-            continue;
-        }
-
-        // Le script cherche dans le texte visible ET dans l'attribut data-tags alternatif
-        let contentText = cards[i].innerText.toLowerCase();
-        let tags = cards[i].getAttribute('data-tags') ? cards[i].getAttribute('data-tags').toLowerCase() : "";
-        
-        if (contentText.includes(input) || tags.includes(input)) {
-            cards[i].style.display = "block";
         } else {
             cards[i].style.display = "none";
+        }
+    }
+}
+</script>
+<script>
+function searchVideo() {
+    // 1. On récupère le mot tapé dans la barre
+    let input = document.getElementById('searchBar').value.toLowerCase();
+    
+    // 2. On prend absolument TOUTES les cartes de la page
+    let cards = document.getElementsByClassName('card');
+
+    // 3. On les filtre TOUTES, sans en oublier une seule
+    for (let i = 0; i < cards.length; i++) {
+        let contentText = cards[i].innerText.toLowerCase();
+        
+        // Si le texte de la carte contient le mot tapé, on l'accorde, sinon on la cache
+        if (contentText.includes(input)) {
+            cards[i].style.display = "block";
+        } else {
+            cards[i].style.display = "none"; // Ce coup-ci, ça cache TOUT le reste !
         }
     }
 }
