@@ -10,6 +10,23 @@
 <meta name='viewport' content='width=device-width,initial-scale=1'>
 
 <link rel='stylesheet' href='style.css'>
+
+<style>
+/* Style pour la barre de recherche */
+#searchBar {
+    width: 90%;
+    max-width: 600px;
+    display: block;
+    margin: 20px auto;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #333;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+</style>
 </head>
 
 <body>
@@ -29,8 +46,11 @@
 <a href='videos.html'>Vidéos</a>
 </nav>
 
-<div class='card'>
+<!-- BARRE DE RECHERCHE INJECTÉE ICI -->
+<input type="text" id="searchBar" onkeyup="searchVideo()" placeholder="🔍 Rechercher un mot clé (ex: tuto, aikido, avis)...">
 
+<!-- Première carte de présentation (ignorée par la recherche pour rester visible) -->
+<div class='card' id="intro-card">
 <p>
 Cette page permet à tous les pratiquants et passionnés de l'Inazuma-Ryū de partager leurs démonstrations, entraînements, kata ou techniques.
 
@@ -52,9 +72,11 @@ Cliquez sur le lien ci-dessous pour envoyer votre vidéo :
 📹 Envoyer une vidéo Inazuma-Ryū
 </a>
 </p>
-
 </div>
-<div class="card">
+
+<!-- CARTES DE CONTENU (FILTRÉES PAR LA RECHERCHE) -->
+
+<div class="card" data-tags="publicite promo annonce clip">
     <h2>(✨) Inazuma-ryū | PUBLICITÉ</h2>
 
     <video controls width="100%">
@@ -62,7 +84,8 @@ Cliquez sur le lien ci-dessous pour envoyer votre vidéo :
         Votre navigateur ne supporte pas la lecture de cette vidéo.
     </video>
 </div>
-<div class='card'>
+
+<div class='card' data-tags="jokata sabre baton jo aikido youtube">
     <h2>(👤) Anonyme | Jōkata ( initialement Aïkido mais aussi étudié en Inazuma-ryū)</h2>
 <p>@Fenice Rossa Grottaglie A.S.D.(YouTube)</p>
     <iframe width="100%" height="315"
@@ -72,33 +95,65 @@ Cliquez sur le lien ci-dessous pour envoyer votre vidéo :
         allowfullscreen>
     </iframe>
 </div>
-    <div class='card'>
+
+<div class='card' data-tags="tuto tutoriel ceinture habit tenue">
     <h2>(✨) Inazuma-ryū | Tuto - Mettre sa ceinture</h2>
 
     <img src="images/tuto-ceinture.png"
          alt="Tutoriel pour mettre sa ceinture"
          width="100%">
 </div>
-    <div class='card'>
 
+<div class='card' id="avis-form-card">
     <h2>Donnez votre avis</h2>
-
     <p>
         Votre avis est important pour l'évolution de l'Inazuma-Ryū et de son site officiel.
         N'hésitez pas à partager vos impressions, suggestions ou remarques.
     </p>
-
     <p style="text-align:center;">
         <a href="https://docs.google.com/forms/d/e/1FAIpQLSdIlw7e82CQLhrXN6UV2VDANoG21JbnCZHzhCZpuKIFhHSq0Q/viewform?usp=publish-editor"
            target="_blank">
            ⭐ Donner mon avis
         </a>
     </p>
-</div><div class='card'><h2>Paul98 | ⭐️⭐️⭐️★★<br>Très bon site, très bonnes techniques, très bon dokun mais c’est dommage je n’ai pas trouvé de dojo pratiquant cet art martial près de chez moi.</h2></div><div class='card'><h2>Anonyme | ⭐️⭐️⭐️⭐️⭐️<br>Aucun avis</h2></div>
+</div>
+
+<div class='card' data-tags="paul98 avis commentaire critique dojo pratique">
+    <h2>Paul98 | ⭐️⭐️⭐️★★<br>Très bon site, très bonnes techniques, très bon dokun mais c’est dommage je n’ai pas trouvé de dojo pratiquant cet art martial près de chez moi.</h2>
+</div>
+
+<div class='card' data-tags="anonyme avis commentaire etoiles">
+    <h2>Anonyme | ⭐️⭐️⭐️⭐️⭐️<br>Aucun avis</h2>
+</div>
 
 <div class="logo-rond">
     <img src="logo.png" alt="Logo Inazuma-Ryū">
 </div>
+
+<!-- SCRIPT JAVASCRIPT DE RECHERCHE -->
+<script>
+function searchVideo() {
+    let input = document.getElementById('searchBar').value.toLowerCase();
+    let cards = document.getElementsByClassName('card');
+
+    for (let i = 0; i < cards.length; i++) {
+        // On ignore la carte d'intro et le formulaire pour qu'ils restent toujours visibles
+        if (cards[i].id === "intro-card" || cards[i].id === "avis-form-card") {
+            continue;
+        }
+
+        // Le script cherche dans le texte visible ET dans l'attribut data-tags alternatif
+        let contentText = cards[i].innerText.toLowerCase();
+        let tags = cards[i].getAttribute('data-tags') ? cards[i].getAttribute('data-tags').toLowerCase() : "";
+        
+        if (contentText.includes(input) || tags.includes(input)) {
+            cards[i].style.display = "block";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
+</script>
 
 </body>
 <footer>INAZUMA-RYŪ</footer>
